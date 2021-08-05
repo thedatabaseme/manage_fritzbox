@@ -16,6 +16,8 @@ An example Playbook Call looks like this. Ofcourse you may want to specify the V
 You can specify a List of IP Adresses when calling the Playbook. Each of which will be rebootet.
 
     - ansible-playbook reboot_fritzbox.yml -e "fritzbox_user=myuser fritzbox_password=supersecret ip_list=192.168.178.2" -k -K -u <username>
+
+Be aware, that the Playbook runs on the Ansible Execution Node itself. So you have to provide the OS User of your local machine and the corresponding password.
     
 Author Information
 ------------------
