@@ -11,7 +11,7 @@
   - name: Get Current Connection Information
     uri:
       url: "http://{{ item }}:49000/igdupnp/control/WANCommonIFC1"
-      method: GET
+      method: POST
       body_format: json
       body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'><s:Body><u:GetStatusInfo xmlns:u='urn:schemas-upnp-org:service:WANIPConnection:1'></u:GetStatusInfo></s:Body></s:Envelope>"
       headers:
@@ -28,4 +28,4 @@
 
   - name: Print Connection Information
     debug:
-      var: connection_information
+      var: connection_information.results[0].content
