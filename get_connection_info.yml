@@ -1,0 +1,31 @@
+---
+
+- hosts: "localhost"
+  vars:
+    ip_list:
+      192.168.178.2
+    fritzbox_user: "username"
+    fritzbox_password: "supersecret"
+  tasks:
+
+  - name: Get Current Connection Information
+    uri:
+      url: "http://{{ item }}:49000/igdupnp/control/WANCommonIFC1"
+      method: GET
+      body_format: json
+      body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'><s:Body><u:$action xmlns:u='$uri'></u:$action></s:Body></s:Envelope>"
+      headers:
+        Content-Type: 'text/xml; charset="utf-8"'
+        SoapAction: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1#GetCommonLinkProperties"
+      url_username: "{{ fritzbox_user }}"
+      url_password: "{{ fritzbox_password }}"
+      force_basic_auth: true
+      return_content: true
+      validate_certs: false
+    register: connection_information
+    loop:
+      - "{{ ip_list }}"
+
+  - name: Print Connection Information
+    debug:
+      var: connection_information
