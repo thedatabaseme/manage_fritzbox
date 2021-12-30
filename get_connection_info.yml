@@ -26,7 +26,17 @@
     loop:
       - "{{ ip_list }}"
 
-  - name: Print external IP address
+  - name: Convert XML to JSON
+    xml:
+      xmlstring: "{{external_ip_xml.results[0].content}}"
+      xpath: /s:Envelope/s:Body/u:GetCommonLinkPropertiesResponse
+      content: attribute
+      namespaces:
+        s: "http://schemas.xmlsoap.org/soap/envelope/"
+        u: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1"
+    register: external_ip
+
+  - name: Print connection informations
     debug:
       var: connection_information.results[0].content
     
