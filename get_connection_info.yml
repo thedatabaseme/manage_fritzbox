@@ -49,8 +49,9 @@
       xmlstring: "{{connection_information.results[0].content}}"
       xpath: /s:Body/u:GetExternalIPAddressResponse/NewExternalIPAddress
       content: attribute
-#      namespaces:
-#        x: "http://schemas.xmlsoap.org/soap/envelope/"
+      namespaces:
+        s: "http://schemas.xmlsoap.org/soap/envelope/"
+        u: "urn:schemas-upnp-org:service:WANIPConnection:1\"
     register: instance_attributes
 
   - name: Print Connection Information
