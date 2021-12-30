@@ -51,7 +51,7 @@
       content: attribute
       namespaces:
         s: "http://schemas.xmlsoap.org/soap/envelope/"
-        u: "urn:schemas-upnp-org:service:WANIPConnection:1\"
+        u: "urn:schemas-upnp-org:service:WANIPConnection:1"
     register: instance_attributes
 
   - name: Print Connection Information
