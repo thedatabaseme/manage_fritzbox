@@ -22,10 +22,53 @@
       force_basic_auth: true
       return_content: true
       validate_certs: false
-    register: connection_information
+    register: connection_information_xml
     loop:
       - "{{ ip_list }}"
 
-  - name: Print Connection Information
+#  - name: Convert XML to JSON
+#    xml:
+#      xmlstring: "{{connection_information_xml.results[0].content}}"
+#      xpath: /s:Envelope/s:Body/u:GetCommonLinkPropertiesResponse
+#      content: attribute
+#      namespaces:
+#        s: "http://schemas.xmlsoap.org/soap/envelope/"
+#        u: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1"
+#    register: connection_information
+
+  - name: Print connection informations
     debug:
-      var: connection_information.results[0].content
+#      var: connection_information
+      var: connection_information_xml.results[0].content
+    
+  - name: Get current external IP Address
+    uri:
+      url: "http://{{ item }}:49000/igdupnp/control/WANIPConn1"
+      method: POST
+      body_format: json
+      body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'><s:Body><u:GetExternalIPAddress xmlns:'u=urn:schemas-upnp-org:service:WANIPConnection:1'></u:GetExternalIPAddress></s:Body></s:Envelope>"
+      headers:
+        Content-Type: 'text/xml; charset="utf-8"'
+        SoapAction: "urn:schemas-upnp-org:service:WANIPConnection:1#GetExternalIPAddress"
+      url_username: "{{ fritzbox_user }}"
+      url_password: "{{ fritzbox_password }}"
+      force_basic_auth: true
+      return_content: true
+      validate_certs: false
+    register: external_ip_xml
+    loop:
+      - "{{ ip_list }}"
+
+  - name: Convert XML to JSON
+    xml:
+      xmlstring: "{{external_ip_xml.results[0].content}}"
+      xpath: /s:Envelope/s:Body/u:GetExternalIPAddressResponse/NewExternalIPAddress
+      content: text
+      namespaces:
+        s: "http://schemas.xmlsoap.org/soap/envelope/"
+        u: "urn:schemas-upnp-org:service:WANIPConnection:1"
+    register: external_ip
+
+  - name: Print external IP address
+    debug:
+      var: external_ip.matches[0].NewExternalIPAddress
