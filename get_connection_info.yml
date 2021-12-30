@@ -26,19 +26,20 @@
     loop:
       - "{{ ip_list }}"
 
-  - name: Convert XML to JSON
-    xml:
-      xmlstring: "{{connection_information_xml.results[0].content}}"
-      xpath: /s:Envelope/s:Body/u:GetCommonLinkPropertiesResponse
-      content: attribute
-      namespaces:
-        s: "http://schemas.xmlsoap.org/soap/envelope/"
-        u: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1"
-    register: connection_information
+#  - name: Convert XML to JSON
+#    xml:
+#      xmlstring: "{{connection_information_xml.results[0].content}}"
+#      xpath: /s:Envelope/s:Body/u:GetCommonLinkPropertiesResponse
+#      content: attribute
+#      namespaces:
+#        s: "http://schemas.xmlsoap.org/soap/envelope/"
+#        u: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1"
+#    register: connection_information
 
   - name: Print connection informations
     debug:
-      var: connection_information
+#      var: connection_information
+      var: connection_information_xml
     
   - name: Get current external IP Address
     uri:
