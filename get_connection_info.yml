@@ -38,7 +38,7 @@
 
   - name: Print connection informations
     debug:
-      var: connection_information.matches[0]
+      var: connection_information
     
   - name: Get current external IP Address
     uri:
