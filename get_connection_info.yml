@@ -22,23 +22,23 @@
       force_basic_auth: true
       return_content: true
       validate_certs: false
-    register: connection_information
+    register: connection_information_xml
     loop:
       - "{{ ip_list }}"
 
   - name: Convert XML to JSON
     xml:
-      xmlstring: "{{external_ip_xml.results[0].content}}"
+      xmlstring: "{{connection_information_xml.results[0].content}}"
       xpath: /s:Envelope/s:Body/u:GetCommonLinkPropertiesResponse
       content: attribute
       namespaces:
         s: "http://schemas.xmlsoap.org/soap/envelope/"
         u: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1"
-    register: external_ip
+    register: connection_information
 
   - name: Print connection informations
     debug:
-      var: connection_information.results[0].content
+      var: connection_information.matches[0]
     
   - name: Get current external IP Address
     uri:
