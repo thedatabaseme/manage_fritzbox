@@ -8,25 +8,29 @@
     fritzbox_password: "supersecret"
   tasks:
 
-#  - name: Get Current Connection Information
-#    uri:
-#      url: "http://{{ item }}:49000/igdupnp/control/WANCommonIFC1"
-#      method: POST
-#      body_format: json
-#      body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'><s:Body><u:GetStatusInfo xmlns:u='urn:schemas-upnp-org:service:WANIPConnection:1'></u:GetStatusInfo></s:Body></s:Envelope>"
-#      headers:
-#        Content-Type: 'text/xml; charset="utf-8"'
-#        SoapAction: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1#GetCommonLinkProperties"
-#      url_username: "{{ fritzbox_user }}"
-#      url_password: "{{ fritzbox_password }}"
-#      force_basic_auth: true
-#      return_content: true
-#      validate_certs: false
-#    register: connection_information
-#    loop:
-#      - "{{ ip_list }}"
-    
   - name: Get Current Connection Information
+    uri:
+      url: "http://{{ item }}:49000/igdupnp/control/WANCommonIFC1"
+      method: POST
+      body_format: json
+      body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'><s:Body><u:GetStatusInfo xmlns:u='urn:schemas-upnp-org:service:WANIPConnection:1'></u:GetStatusInfo></s:Body></s:Envelope>"
+      headers:
+        Content-Type: 'text/xml; charset="utf-8"'
+        SoapAction: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1#GetCommonLinkProperties"
+      url_username: "{{ fritzbox_user }}"
+      url_password: "{{ fritzbox_password }}"
+      force_basic_auth: true
+      return_content: true
+      validate_certs: false
+    register: connection_information
+    loop:
+      - "{{ ip_list }}"
+
+  - name: Print external IP address
+    debug:
+      var: connection_information.results[0].content
+    
+  - name: Get current external IP Address
     uri:
       url: "http://{{ item }}:49000/igdupnp/control/WANIPConn1"
       method: POST
@@ -40,13 +44,13 @@
       force_basic_auth: true
       return_content: true
       validate_certs: false
-    register: connection_information
+    register: external_ip_xml
     loop:
       - "{{ ip_list }}"
 
-  - name: XML
+  - name: Convert XML to JSON
     xml:
-      xmlstring: "{{connection_information.results[0].content}}"
+      xmlstring: "{{external_ip_xml.results[0].content}}"
       xpath: /s:Envelope/s:Body/u:GetExternalIPAddressResponse/NewExternalIPAddress
       content: text
       namespaces:
@@ -54,7 +58,6 @@
         u: "urn:schemas-upnp-org:service:WANIPConnection:1"
     register: external_ip
 
-  - name: Print Connection Information
+  - name: Print external IP address
     debug:
-#      var: connection_information.results[0].content
       var: external_ip.matches[0].NewExternalIPAddress
