@@ -47,7 +47,7 @@
   - name: XML
     xml:
       xmlstring: "{{connection_information.results[0].content}}"
-      xpath: /s:Body/u:GetExternalIPAddressResponse/NewExternalIPAddress
+      xpath: /s:Envelope/s:Body/u:GetExternalIPAddressResponse/NewExternalIPAddress
       content: attribute
       namespaces:
         s: "http://schemas.xmlsoap.org/soap/envelope/"
