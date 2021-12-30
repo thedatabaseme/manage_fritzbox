@@ -52,9 +52,9 @@
       namespaces:
         s: "http://schemas.xmlsoap.org/soap/envelope/"
         u: "urn:schemas-upnp-org:service:WANIPConnection:1"
-    register: instance_attributes
+    register: external_ip
 
   - name: Print Connection Information
     debug:
 #      var: connection_information.results[0].content
-      var: instance_attributes
+      var: external_ip.matches[0].NewExternalIPAddress
