@@ -46,4 +46,5 @@
 
   - name: Print Connection Information
     debug:
-      var: connection_information.results[0].content
+#      var: connection_information.results[0].content
+      var: connection_information.results[0]
