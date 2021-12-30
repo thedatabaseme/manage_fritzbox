@@ -8,6 +8,24 @@
     fritzbox_password: "supersecret"
   tasks:
 
+#  - name: Get Current Connection Information
+#    uri:
+#      url: "http://{{ item }}:49000/igdupnp/control/WANCommonIFC1"
+#      method: POST
+#      body_format: json
+#      body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'><s:Body><u:GetStatusInfo xmlns:u='urn:schemas-upnp-org:service:WANIPConnection:1'></u:GetStatusInfo></s:Body></s:Envelope>"
+#      headers:
+#        Content-Type: 'text/xml; charset="utf-8"'
+#        SoapAction: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1#GetCommonLinkProperties"
+#      url_username: "{{ fritzbox_user }}"
+#      url_password: "{{ fritzbox_password }}"
+#      force_basic_auth: true
+#      return_content: true
+#      validate_certs: false
+#    register: connection_information
+#    loop:
+#      - "{{ ip_list }}"
+    
   - name: Get Current Connection Information
     uri:
       url: "http://{{ item }}:49000/igdupnp/control/WANCommonIFC1"
@@ -16,7 +34,7 @@
       body: "<?xml version='1.0' encoding='utf-8'?><s:Envelope s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/' xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'><s:Body><u:GetStatusInfo xmlns:u='urn:schemas-upnp-org:service:WANIPConnection:1'></u:GetStatusInfo></s:Body></s:Envelope>"
       headers:
         Content-Type: 'text/xml; charset="utf-8"'
-        SoapAction: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1#GetCommonLinkProperties"
+        SoapAction: "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1#GetInfo"
       url_username: "{{ fritzbox_user }}"
       url_password: "{{ fritzbox_password }}"
       force_basic_auth: true
