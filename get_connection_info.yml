@@ -44,7 +44,14 @@
     loop:
       - "{{ ip_list }}"
 
+  - name: XML
+    xml:
+      xmlstring: "{{connection_information.results[0].content}}"
+      xpath: /Body/GetExternalIPAddressResponse/NewExternalIPAddress
+      content: attribute
+    register: instance_attributes
+
   - name: Print Connection Information
     debug:
 #      var: connection_information.results[0].content
-      var: connection_information.results[0].content | replace('\n', '')
+      var: instance_attributes
