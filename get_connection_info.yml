@@ -39,7 +39,7 @@
   - name: Print connection informations
     debug:
 #      var: connection_information
-      var: connection_information_xml.results.content
+      var: connection_information_xml.results[0].content
     
   - name: Get current external IP Address
     uri:
