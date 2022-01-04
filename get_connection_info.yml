@@ -73,6 +73,7 @@
     debug:
       var: external_ip.matches[0].NewExternalIPAddress
 
-  - name: Setting external IP Address as Variable
-    set_fact:
-      external_ip_address: "{{ external_ip.matches[0].NewExternalIPAddress }}"
+  - name: Setting external IP Address as Variable for later use
+    set_stats:
+      data:
+        external_ip_address: "{{ external_ip.matches[0].NewExternalIPAddress }}"
