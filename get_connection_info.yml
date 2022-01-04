@@ -1,6 +1,8 @@
 ---
 
 - hosts: "localhost"
+  gather_facts: true
+
   vars:
     ip_list:
       192.168.178.2
@@ -73,6 +75,10 @@
     debug:
       var: external_ip.matches[0].NewExternalIPAddress
 
-  - name: Setting external IP Address as Variable
+  - name: Setting external IP Address as Variable for later use
     set_fact:
       external_ip_address: "{{ external_ip.matches[0].NewExternalIPAddress }}"
+      cacheable: true
+#    set_stats:
+#      data:
+#        external_ip_address: "{{ external_ip.matches[0].NewExternalIPAddress }}"
